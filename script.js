@@ -1,62 +1,37 @@
 'use strict';
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('.close-modal');
+const showBtns = document.querySelectorAll('.show-modal');
+const overlay = document.querySelector('.overlay');
 
-const checkBtn = document.querySelector('.check');
-const messageText = document.querySelector('.message');
-const numberBox = document.querySelector('.number');
+for (let i = 0; i < showBtns.length; i++) {
+  showBtns[i].addEventListener('click', function () {
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  });
+}
 
-let randomNumber = Math.trunc(Math.random() * 20) + 1;
-let gameScore = 20;
+closeBtn.addEventListener('click', () => {
+  hideModalAndOverlay();
+});
 
-checkBtn.addEventListener('click', function () {
-  const guess = Number(document.querySelector('.guess').value);
+overlay.addEventListener('click', () => {
+  hideModalAndOverlay();
+});
 
-  // When there is no input
-  if (!guess) {
-    messageText.textContent = '⛔ No number!';
+function hideModalAndOverlay() {
+  modal.classList.add('hidden');
+  overlay.classList.add('hidden');
+}
 
-    //When player wins
-  } else if (guess === randomNumber) {
-    numberBox.textContent = randomNumber;
-    messageText.textContent = '🎉 Correct number!';
-    gameScore++;
-    document.body.style.backgroundColor = 'green';
-    document.querySelector('.number').style.width = '30rem';
-
-    // When guess is higher than the random number
-  } else if (guess > randomNumber) {
-    if (gameScore > 1) {
-      messageText.textContent = '❗ Too high';
-      gameScore--;
-      document.querySelector('.score').textContent = gameScore;
-    } else {
-      messageText.textContent = 'You lost the game❗';
-      document.querySelector('.score').textContent = 0;
-    }
-
-    // When guess is lower than the random number
-  } else if (guess < randomNumber) {
-    if (gameScore > 1) {
-      messageText.textContent = '❗ Too low';
-      gameScore--;
-      document.querySelector('.score').textContent = gameScore;
-
-      // when the players tries a certain number of times and loses.
-    } else {
-      messageText.textContent = 'You lost the game❗';
-      document.querySelector('.score').textContent = 0;
-      document.body.style.backgroundColor = 'red';
-    }
+document.addEventListener('keydown', e => {
+  if (
+    e.key === 'Escape' &&
+    !modal.classList.contains('hidden') &&
+    !overlay.classList.contains('hidden')
+  ) {
+    hideModalAndOverlay();
   }
 });
 
-const resetBtn = document.querySelector('.again');
-resetBtn.addEventListener('click', function () {
-  gameScore = 20;
-  randomNumber = Math.trunc(Math.random() * 20) + 1;
-  messageText.textContent = 'Start guessing...';
-  numberBox.textContent = '?';
-  document.querySelector('.guess').value = '';
-  document.querySelector('.score').textContent = gameScore;
-  document.body.style.backgroundColor = '#222';
-  document.querySelector('.number').style.width = '15rem';
-});
+// e represents the event object
